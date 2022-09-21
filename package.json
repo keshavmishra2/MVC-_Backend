@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon idex"
+    "server": "nodemon src/index"
   },
   "repository": {
     "type": "git",

@@ -6,82 +6,18 @@ const app = express();
 
 app.use(express.json());
 // connect to database
-
-const connect  = () => {
-    return mongoose.connect("mongodb://127.0.0.1:27017/usersCollection");
-}
-
+const connect = require("./configs/db");
 // build the schema & model
 // userSchama
-const userSchema = new mongoose.Schema({
-    first_name : { type : String, required : true },
-    last_name : { type : String, required : false},
-    email : {type : String, required: true},
-    gender : { type : String, required : false, default : "Male"},
-    age:{type: Number, required : true}
-},
-{
-    versionKey : false,
-    timestamps : true,
-}
-);
-
-const User = mongoose.model("user", userSchema);
-
+const User = require("./models/user.model");
 // build the tagSchema & Model
-
-const tagSchema = new mongoose.Schema({
-    name : {type : String, required : true},
-},{
-    versionKey : false,
-    timestamps : true,
-}
-);
-
-const Tag = mongoose.model("tag", tagSchema); //tag =>tags
-
+const Tag = require("./models/tag.modle"); 
 //build the Post schema and Model
-
-const postSchema = new mongoose.Schema({
-   title : {type : String, required : true},
-   content : {type : String, required : true},
-   user_id : {
-           type :mongoose.Schema.Types.ObjectId,
-           ref : "user",
-           required : true,
-   },
-   tag_ids : [{
-    type : mongoose.Schema.Types.ObjectId,
-    ref : "tag",
-    required : true,
-   }]
-
-},
-{
-    versionKey : false,
-    timestamps : true,
-}
-);
-
-const Post = mongoose.model("post", postSchema);
-
+const Post = require("./models/post.model");
 
 // build the comment schema
 
-const CommentSchema = new mongoose.Schema({
-    reply : {type : String, required : true},
-    post_id : {
-        type : mongoose.Schema.Types.ObjectId, 
-        ref : "post",
-        required : true,
-    }
-},{
-    versionKey : false,
-    timestamps : true, 
-})
-
-
-const Comment  = mongoose.model("comment", CommentSchema); //Comment => comments
+const Comment  = require("./models/comment.model");
 
 // ------------------CRUD Operation ------------------------------------//
 // ----------------REST API CRUD -----------------------------------//
@@ -328,7 +264,7 @@ app.delete("/comments/:id", async(req, res) => {
 
 app.listen(2345, async ()=> {
     try{
-        await connect();
+       await connect();
     console.log("listening on port 2345");
     }
     catch(err){
